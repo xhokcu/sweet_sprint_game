@@ -18,6 +18,7 @@ var sun;
 var mountain1;
 var mountain2;
 var collectable;
+var canyon;
 
 var isLeft;
 var isRight;
@@ -27,7 +28,7 @@ var isFalling;
 function setup() {
   createCanvas(1024, 576);
   floorPos_y = (height * 3) / 4;
-  gameChar_x = width / 2;
+  gameChar_x = width / 3;
   gameChar_y = floorPos_y;
 
   isLeft = false;
@@ -79,6 +80,12 @@ function setup() {
     x: 800,
     y: floorPos_y - 40,
     size: 40,
+    isFound: false,
+  };
+
+  canyon = {
+    x1: width / 2,
+    length: 80,
   };
 }
 
@@ -86,7 +93,6 @@ function draw() {
   ///////////DRAWING CODE//////////
 
   background(254, 192, 183); //fill the sky blue
-
   noStroke();
 
   // SUN
@@ -157,60 +163,96 @@ function draw() {
   noStroke();
 
   // COLLECTABLE
-  // base
-  fill(240, 158, 90);
-  ellipse(collectable.x, collectable.y, collectable.size, collectable.size);
-  // chocalate
-  fill(145, 48, 36);
-  ellipse(
-    collectable.x,
-    collectable.y,
-    collectable.size - 12,
-    collectable.size - 12,
-  );
-  // candy
-  // yellow
-  fill(253, 171, 72);
-  ellipse(collectable.x - 4, collectable.y - 8, 3);
-  ellipse(collectable.x - 4, collectable.y + 8, 4);
-  ellipse(collectable.x, collectable.y, 2);
-  // blue
-  fill(111, 148, 209);
-  ellipse(collectable.x + 4, collectable.y + 6, 6, 3);
-  // green
-  stroke(137, 171, 128);
-  strokeWeight(4);
-  line(
-    collectable.x + 4,
-    collectable.y - 6,
-    collectable.x + 6,
-    collectable.y - 2,
-  );
-  // orange
-  stroke(255, 120, 69);
-  strokeWeight(3);
-
-  line(
-    collectable.x - 6,
-    collectable.y - 2,
-    collectable.x - 8,
-    collectable.y + 2,
-  );
-  noStroke();
+  if (!collectable.isFound) {
+    // doughnut
+    noFill();
+    stroke(240, 158, 90);
+    strokeWeight(4);
+    ellipse(collectable.x, collectable.y, collectable.size, collectable.size);
+    // chocolate
+    noFill();
+    stroke(145, 48, 36);
+    strokeWeight(12);
+    ellipse(
+      collectable.x,
+      collectable.y,
+      collectable.size - 16,
+      collectable.size - 16,
+    );
+    noStroke();
+    // candy
+    // yellow
+    fill(253, 171, 72);
+    ellipse(collectable.x - 6, collectable.y - 10, 4);
+    ellipse(collectable.x + 10, collectable.y - 6, 4);
+    stroke(253, 171, 72);
+    strokeWeight(3);
+    line(
+      collectable.x - 10,
+      collectable.y - 4,
+      collectable.x - 12,
+      collectable.y,
+    );
+    noStroke();
+    // blue
+    fill(111, 148, 209);
+    ellipse(collectable.x - 6, collectable.y - 10, 4);
+    stroke(111, 148, 209);
+    strokeWeight(3);
+    line(
+      collectable.x - 4,
+      collectable.y + 10,
+      collectable.x,
+      collectable.y + 12,
+    );
+    // green
+    stroke(137, 171, 128);
+    strokeWeight(3);
+    line(
+      collectable.x,
+      collectable.y - 12,
+      collectable.x + 4,
+      collectable.y - 12,
+    );
+    noStroke();
+    fill(137, 171, 128);
+    ellipse(collectable.x + 8, collectable.y + 10, 4);
+    // orange
+    fill(255, 120, 69);
+    ellipse(collectable.x - 10, collectable.y + 6, 4);
+    stroke(255, 120, 69);
+    strokeWeight(3);
+    line(
+      collectable.x + 12,
+      collectable.y,
+      collectable.x + 10,
+      collectable.y + 4,
+    );
+    noStroke();
+  }
 
   // FLOOR
   // floor top
   fill(220, 20, 60);
   rect(0, floorPos_y, width / 2, 20, 0, 24, 0, 0);
-  rect(width / 2 + 100, floorPos_y, width / 2 - 100, 20, 24, 0, 0, 0);
+  rect(
+    canyon.x1 + canyon.length,
+    floorPos_y,
+    width - canyon.x1 - canyon.length,
+    20,
+    24,
+    0,
+    0,
+    0,
+  );
   // floor
   fill(255, 182, 123);
-  rect(0, floorPos_y + 20, width / 2, height - floorPos_y);
+  rect(0, floorPos_y + 20, width / 2, height - floorPos_y - 20);
   rect(
-    width / 2 + 100,
+    canyon.x1 + canyon.length,
     floorPos_y + 20,
-    width - width / 2 - 100,
-    height - floorPos_y,
+    width - canyon.x1 - canyon.length,
+    height - floorPos_y - 20,
   );
 
   // GAME CHARACTER
@@ -485,6 +527,7 @@ function draw() {
 
   ///////////INTERACTION CODE//////////
   //Put conditional statements to move the game character below here
+
   if (isLeft) {
     gameChar_x -= 3;
   }
@@ -499,7 +542,24 @@ function draw() {
     isFalling = false;
   }
 
-  if (isLeft && isFalling) {
+  // collect item
+  if (dist(gameChar_x, gameChar_y, collectable.x, collectable.y) < 50) {
+    collectable.isFound = true;
+  }
+
+  // plummeting from canyon
+  if (
+    gameChar_x > canyon.x1 &&
+    gameChar_x < canyon.x1 + canyon.length &&
+    gameChar_y >= floorPos_y
+  ) {
+    isPlummeting = true;
+  } else {
+    isPlummeting = false;
+  }
+
+  if (isPlummeting) {
+    gameChar_y += 2;
   }
 }
 
@@ -508,22 +568,21 @@ function keyPressed() {
   // keys are pressed.
 
   //open up the console to see how these work
-  console.log('keyPressed: ' + key);
-  console.log('keyPressed: ' + keyCode);
+  // console.log('keyPressed: ' + key);
+  // console.log('keyPressed: ' + keyCode);
 
-  if (keyCode == 37) {
-    isLeft = true;
-  }
+  if (!isPlummeting) {
+    if (keyCode == 37) {
+      isLeft = true;
+    }
 
-  console.log(isLeft);
+    if (keyCode == 39) {
+      isRight = true;
+    }
 
-  if (keyCode == 39) {
-    isRight = true;
-  }
-
-  // w key is pressed
-  if (!isFalling && (keyCode == 87 || keyCode == 38)) {
-    gameChar_y -= 150;
+    if (!isFalling && (keyCode == 87 || keyCode == 38)) {
+      gameChar_y -= 150;
+    }
   }
 }
 
@@ -531,8 +590,8 @@ function keyReleased() {
   // if statements to control the animation of the character when
   // keys are released.
 
-  console.log('keyReleased: ' + key);
-  console.log('keyReleased: ' + keyCode);
+  // console.log('keyReleased: ' + key);
+  // console.log('keyReleased: ' + keyCode);
 
   if (keyCode == 37) {
     isLeft = false;
