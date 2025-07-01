@@ -1,6 +1,6 @@
 # 🍩 SweetSprint
 
-[🔗 Live Demo](https://helinokcu.com)
+[🔗 Live Demo](https://sweet-sprint.netlify.app)
 
 ## 🕹️ About the Game
 
