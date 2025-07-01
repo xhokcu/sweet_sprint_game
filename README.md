@@ -1,4 +1,4 @@
-# 🎮 SweetSprint
+# 🍩 SweetSprint
 
 [🔗 Live Demo](https://helinokcu.com)
 
