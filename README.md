@@ -24,15 +24,14 @@
 1. Use the **Left (←)** and **Right (→)** arrow keys to move your character.
 2. Press the **Up arrow (↑)** or **Space bar** to jump over obstacles.
 3. Avoid hitting any obstacles or falling off platforms.
-4. Your score increases based on how far you run and the obstacles you successfully avoid.
-5. The game is endless — aim for the highest score possible!
+4. Your score increases based on how many donuts you collect.
 
 ## 📂 Running Locally
 
 To run the project locally, follow these steps:
 
 ```bash
-git clone https://github.com/helinokcu/pixelrunner.git
-cd pixelrunner
+git clone https://github.com/xhokcu/sweet_sprint_game.git
+cd sweet_sprint_game
 open index.html
 ```
