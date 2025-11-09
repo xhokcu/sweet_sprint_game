@@ -3,6 +3,7 @@
 */
 
 // == Global Variable Declarations ==
+var isMobileOrTablet;
 var gameCharX;
 var gameCharY;
 var gameCharHeight;
@@ -46,6 +47,7 @@ function preload() {
 }
 
 function setup() {
+  const isMobileOrTablet = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
   createCanvas(1024, 576);
   floorPosY = (height * 3) / 4;
   lives = 3;
@@ -54,6 +56,11 @@ function setup() {
 }
 
 function draw() {
+
+  if (isMobileOrTablet) {
+    showMobileWarning();
+    return;
+  }
   // == Camera Follows Player ==
   cameraPosX = gameCharX - width / 2;
 
@@ -228,6 +235,18 @@ function keyReleased() {
   if (keyCode === 39) {
     isRight = false;
   }
+}
+
+function showMobileWarning() {
+  background(30);
+
+  textAlign(CENTER, CENTER);
+  textSize(24);
+  fill(255);
+
+  text("Oops!\nThis game isn't supported on mobile yet.\nPlease use a computer!", 
+       width / 2, 
+       height / 2);
 }
 
 function startGame() {
