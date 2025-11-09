@@ -47,7 +47,7 @@ function preload() {
 }
 
 function setup() {
-  const isMobileOrTablet = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
+  isMobileOrTablet = /Mobi|Android|iPhone|iPad|iPod|Tablet/i.test(navigator.userAgent);
   createCanvas(1024, 576);
   floorPosY = (height * 3) / 4;
   lives = 3;
@@ -200,7 +200,6 @@ function draw() {
 function keyPressed() {
   // == Moving with Arrow Keys ==
   if (!isPlummeting && !isGameWon && !isGameLost) {
-    console.log('girdi');
     if (keyCode == 37) {
       isLeft = true;
     }
